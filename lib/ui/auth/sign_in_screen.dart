@@ -88,8 +88,8 @@ class SignInScreen extends StatelessWidget {
                       _signInBloc
                         ..add(
                           ButtonPressed(
-                            email: _emailController.text,
-                            password: _passwordController.text,
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
                           ),
                         );
                     },
