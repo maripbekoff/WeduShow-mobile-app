@@ -1,6 +1,7 @@
 import 'package:Rose/blocs/reg_bloc/reg_bloc.dart';
 import 'package:Rose/main_screen.dart';
 import 'package:Rose/repos/user_repo.dart';
+import 'package:Rose/ui/auth/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -104,7 +105,13 @@ class RegScreen extends StatelessWidget {
                   SizedBox(width: 20),
                   RaisedButton(
                     onPressed: () {
-                      Navigator.popAndPushNamed(context, '/signin');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              SignInBlocProvider(),
+                        ),
+                      );
                     },
                     child: Text("Есть аккаунт?"),
                   ),

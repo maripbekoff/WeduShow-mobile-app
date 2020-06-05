@@ -1,4 +1,5 @@
 import 'package:Rose/blocs/auth_bloc/auth_bloc.dart';
+import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
 import 'package:Rose/main_screen.dart';
 import 'package:Rose/ui/auth/sign_in_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,15 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => AuthBloc()..add(AppStart()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => AuthBloc()..add(AppStart()),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => StreamBloc()..add(ButtonPressed()),
+        ),
+      ],
       child: MaterialApp(
         title: 'Rose',
         theme: ThemeData(

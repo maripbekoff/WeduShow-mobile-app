@@ -22,7 +22,7 @@ class SignInScreen extends StatelessWidget {
   SignInScreen({Key key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
 
-  UserRepo userRepo;
+  UserRepo userRepo = UserRepo();
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
