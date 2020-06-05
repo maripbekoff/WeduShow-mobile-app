@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "953891470702",
+    "firebase_url": "https://wedushow.firebaseio.com",
+    "project_id": "wedushow",
+    "storage_bucket": "wedushow.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953891470702:android:eff91021f414187886157f",
+        "android_client_info": {
+          "package_name": "codeunion.wedushow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953891470702-c2mvm411ar65bgkiccei9hjevb4k4m74.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfnbC1FvIy0vN0zSwb_R7mTDhgW5UuOvk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953891470702-c2mvm411ar65bgkiccei9hjevb4k4m74.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
