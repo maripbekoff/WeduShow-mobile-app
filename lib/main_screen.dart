@@ -17,7 +17,7 @@ class MainScreen extends StatelessWidget {
           children: <Widget>[
             RaisedButton(
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) => StreamScreen(),

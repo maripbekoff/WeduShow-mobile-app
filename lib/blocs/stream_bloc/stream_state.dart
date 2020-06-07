@@ -26,3 +26,9 @@ class FourPeopleOnStream extends StreamState {
   // TODO: implement props
   List<Object> get props => null;
 }
+
+class FivePeopleOnStream extends StreamState {
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
+}

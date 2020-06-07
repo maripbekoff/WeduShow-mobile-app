@@ -9,3 +9,9 @@ class ButtonPressed extends StreamEvent {
   // TODO: implement props
   List<Object> get props => null;
 }
+
+class StreamClosed extends StreamEvent {
+  @override
+  // TODO: implement props
+  List<Object> get props => null;
+}

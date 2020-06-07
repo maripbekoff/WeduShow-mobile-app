@@ -19,8 +19,14 @@ class StreamBloc extends Bloc<StreamEvent, StreamState> {
     if (event is ButtonPressed) {
       index += 1;
     }
+
+    if (event is StreamClosed) {
+      index = 1;
+      yield StreamInitial();
+    }
+
     switch (index) {
-      case 1:
+      case 1 & 0:
         yield StreamInitial();
         break;
       case 2:
@@ -31,6 +37,9 @@ class StreamBloc extends Bloc<StreamEvent, StreamState> {
         break;
       case 4:
         yield FourPeopleOnStream();
+        break;
+      case 5:
+        yield FivePeopleOnStream();
         break;
     }
   }
