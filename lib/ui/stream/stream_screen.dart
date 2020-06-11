@@ -29,9 +29,10 @@ class _StreamScreenState extends State<StreamScreen> {
   void initState() {
     super.initState();
     controller = CameraController(
-      cameras[0],
+      cameras[2],
       ResolutionPreset.ultraHigh,
     );
+
     controller.initialize().then((_) {
       if (!mounted) {
         return;
@@ -80,7 +81,19 @@ class _StreamScreenState extends State<StreamScreen> {
           backgroundColor: Colors.transparent,
           leading: IconButton(
             onPressed: () {},
-            icon: Icon(Icons.settings),
+            icon: Stack(
+              children: <Widget>[
+                Positioned(
+                  top: 3,
+                  left: 2,
+                  child: Icon(
+                    Icons.settings,
+                    color: Colors.black38,
+                  ),
+                ),
+                Icon(Icons.settings),
+              ],
+            ),
           ),
           actions: <Widget>[
             IconButton(
@@ -88,7 +101,19 @@ class _StreamScreenState extends State<StreamScreen> {
                 _blocProvider..add(StreamClosed());
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.close),
+              icon: Stack(
+                children: <Widget>[
+                  Positioned(
+                    top: 3,
+                    left: 2,
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.black38,
+                    ),
+                  ),
+                  Icon(Icons.close),
+                ],
+              ),
             ),
           ],
         ),
@@ -107,9 +132,21 @@ class _StreamScreenState extends State<StreamScreen> {
                 },
                 child: Padding(
                   padding: EdgeInsets.all(20),
-                  child: Icon(
-                    Icons.add_circle_outline,
-                    color: Colors.white,
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        top: 3,
+                        left: 2,
+                        child: Icon(
+                          Icons.add_circle_outline,
+                          color: Colors.black38,
+                        ),
+                      ),
+                      Icon(
+                        Icons.add_circle_outline,
+                        color: Colors.white,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -202,7 +239,7 @@ class _StreamScreenState extends State<StreamScreen> {
                   ),
                 ),
               ),
-              ClipRRect(
+              ClipRect(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: Container(
@@ -220,7 +257,8 @@ class _StreamScreenState extends State<StreamScreen> {
           ),
         ),
         Expanded(
-          child: Container(
+          child: AspectRatio(
+            aspectRatio: controller.value.aspectRatio,
             child: CameraPreview(controller),
           ),
         ),
@@ -244,7 +282,7 @@ class _StreamScreenState extends State<StreamScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      child: ClipRRect(
+                      child: ClipRect(
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: Container(
@@ -272,7 +310,7 @@ class _StreamScreenState extends State<StreamScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      child: ClipRRect(
+                      child: ClipRect(
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: Container(
@@ -294,7 +332,8 @@ class _StreamScreenState extends State<StreamScreen> {
           ),
         ),
         Expanded(
-          child: Container(
+          child: AspectRatio(
+            aspectRatio: controller.value.aspectRatio,
             child: CameraPreview(controller),
           ),
         ),
@@ -318,7 +357,7 @@ class _StreamScreenState extends State<StreamScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      child: ClipRRect(
+                      child: ClipRect(
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: Container(
@@ -346,7 +385,7 @@ class _StreamScreenState extends State<StreamScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      child: ClipRRect(
+                      child: ClipRect(
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: Container(
@@ -371,7 +410,8 @@ class _StreamScreenState extends State<StreamScreen> {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: Container(
+                child: AspectRatio(
+                  aspectRatio: controller.value.aspectRatio,
                   child: CameraPreview(controller),
                 ),
               ),
@@ -385,7 +425,7 @@ class _StreamScreenState extends State<StreamScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      child: ClipRRect(
+                      child: ClipRect(
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: Container(
@@ -428,7 +468,7 @@ class _StreamScreenState extends State<StreamScreen> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          child: ClipRRect(
+                          child: ClipRect(
                             child: BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                               child: Container(
@@ -457,7 +497,7 @@ class _StreamScreenState extends State<StreamScreen> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          child: ClipRRect(
+                          child: ClipRect(
                             child: BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                               child: Container(
@@ -492,7 +532,7 @@ class _StreamScreenState extends State<StreamScreen> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          child: ClipRRect(
+                          child: ClipRect(
                             child: BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                               child: Container(
@@ -521,7 +561,7 @@ class _StreamScreenState extends State<StreamScreen> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          child: ClipRRect(
+                          child: ClipRect(
                             child: BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                               child: Container(
@@ -548,10 +588,34 @@ class _StreamScreenState extends State<StreamScreen> {
         Center(
           child: CircleAvatar(
             radius: 100,
-            child: CameraPreview(controller),
+            child: ClipOval(
+              child: Transform.scale(
+                scale: 2,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: CameraPreview(controller),
+                ),
+              ),
+            ),
           ),
         ),
       ],
     );
+  }
+}
+
+class TwoPeopleViewClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = new Path();
+    path.addRect(
+      Rect.fromPoints(Offset(0, 0), Offset(size.width, size.height)),
+    );
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
   }
 }
