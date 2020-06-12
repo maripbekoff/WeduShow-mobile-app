@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
@@ -16,6 +18,8 @@ class StreamScreen extends StatefulWidget {
 
 class _StreamScreenState extends State<StreamScreen> {
   CameraController controller;
+
+  bool _buttonPressed = false;
 
   List<Color> _listColor = [
     Colors.blue,
@@ -98,8 +102,9 @@ class _StreamScreenState extends State<StreamScreen> {
           actions: <Widget>[
             IconButton(
               onPressed: () {
-                _blocProvider..add(StreamClosed());
                 Navigator.pop(context);
+                Future.delayed(const Duration(seconds: 1),
+                    () => _blocProvider..add(StreamClosed()));
               },
               icon: Stack(
                 children: <Widget>[
@@ -226,6 +231,21 @@ class _StreamScreenState extends State<StreamScreen> {
   }
 
   Widget _buildTwoPeopleView(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double adjustConstant = max(
+        size.width /
+            min(controller.value.previewSize.width,
+                controller.value.previewSize.height),
+        size.height /
+            max(controller.value.previewSize.width,
+                controller.value.previewSize.height));
+    double logicalHeight = max(controller.value.previewSize.width,
+            controller.value.previewSize.height) *
+        adjustConstant;
+    double logicalWidth = min(controller.value.previewSize.width,
+            controller.value.previewSize.height) *
+        adjustConstant;
+
     return Column(
       children: <Widget>[
         Expanded(
@@ -248,18 +268,48 @@ class _StreamScreenState extends State<StreamScreen> {
                 ),
               ),
               Center(
-                child: CircleAvatar(
-                  backgroundImage: ExactAssetImage('assets/person.jpg'),
-                  radius: 50,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundImage: ExactAssetImage('assets/person.jpg'),
+                      radius: 50,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Барак Обама",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "ЗАЖМИТЕ ЧТОБЫ УДАЛИТЬ ГОСТЯ",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    )
+                  ],
                 ),
               ),
             ],
           ),
         ),
         Expanded(
-          child: AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: CameraPreview(controller),
+          child: ClipRect(
+            child: OverflowBox(
+              minHeight: 0.0,
+              minWidth: 0.0,
+              maxHeight: logicalHeight,
+              maxWidth: logicalWidth,
+              child: SizedBox(
+                width: logicalWidth,
+                height: logicalHeight,
+                child: CameraPreview(controller),
+              ),
+            ),
           ),
         ),
       ],
@@ -267,6 +317,21 @@ class _StreamScreenState extends State<StreamScreen> {
   }
 
   Widget _buildThreePeopleView() {
+    Size size = MediaQuery.of(context).size;
+    double adjustConstant = max(
+        size.width /
+            min(controller.value.previewSize.width,
+                controller.value.previewSize.height),
+        size.height /
+            max(controller.value.previewSize.width,
+                controller.value.previewSize.height));
+    double logicalHeight = max(controller.value.previewSize.width,
+            controller.value.previewSize.height) *
+        adjustConstant;
+    double logicalWidth = min(controller.value.previewSize.width,
+            controller.value.previewSize.height) *
+        adjustConstant;
+
     return Column(
       children: <Widget>[
         Expanded(
@@ -332,9 +397,18 @@ class _StreamScreenState extends State<StreamScreen> {
           ),
         ),
         Expanded(
-          child: AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: CameraPreview(controller),
+          child: ClipRect(
+            child: OverflowBox(
+              minHeight: 0.0,
+              minWidth: 0.0,
+              maxHeight: logicalHeight,
+              maxWidth: logicalWidth,
+              child: SizedBox(
+                width: logicalWidth,
+                height: logicalHeight,
+                child: CameraPreview(controller),
+              ),
+            ),
           ),
         ),
       ],
@@ -342,6 +416,21 @@ class _StreamScreenState extends State<StreamScreen> {
   }
 
   Widget _buildFourPeopleView() {
+    Size size = MediaQuery.of(context).size;
+    double adjustConstant = max(
+        size.width /
+            min(controller.value.previewSize.width,
+                controller.value.previewSize.height),
+        size.height /
+            max(controller.value.previewSize.width,
+                controller.value.previewSize.height));
+    double logicalHeight = max(controller.value.previewSize.width,
+            controller.value.previewSize.height) *
+        adjustConstant;
+    double logicalWidth = min(controller.value.previewSize.width,
+            controller.value.previewSize.height) *
+        adjustConstant;
+
     return Column(
       children: <Widget>[
         Expanded(
@@ -410,9 +499,21 @@ class _StreamScreenState extends State<StreamScreen> {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: AspectRatio(
-                  aspectRatio: controller.value.aspectRatio,
-                  child: CameraPreview(controller),
+                child: ClipRect(
+                  child: OverflowBox(
+                    minHeight: 0.0,
+                    minWidth: 0.0,
+                    maxHeight: logicalHeight,
+                    maxWidth: logicalWidth,
+                    child: SizedBox(
+                      width: logicalWidth,
+                      height: logicalHeight,
+                      child: Transform.scale(
+                        scale: 0.5,
+                        child: CameraPreview(controller),
+                      ),
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -451,6 +552,21 @@ class _StreamScreenState extends State<StreamScreen> {
   }
 
   Widget _buildFivePeopleView(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double adjustConstant = max(
+        size.width /
+            min(controller.value.previewSize.width,
+                controller.value.previewSize.height),
+        size.height /
+            max(controller.value.previewSize.width,
+                controller.value.previewSize.height));
+    double logicalHeight = max(controller.value.previewSize.width,
+            controller.value.previewSize.height) *
+        adjustConstant;
+    double logicalWidth = min(controller.value.previewSize.width,
+            controller.value.previewSize.height) *
+        adjustConstant;
+
     return Stack(
       children: <Widget>[
         Column(
@@ -589,11 +705,18 @@ class _StreamScreenState extends State<StreamScreen> {
           child: CircleAvatar(
             radius: 100,
             child: ClipOval(
-              child: Transform.scale(
-                scale: 2,
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: CameraPreview(controller),
+              child: OverflowBox(
+                minHeight: 0.0,
+                minWidth: 0.0,
+                maxHeight: logicalHeight,
+                maxWidth: logicalWidth,
+                child: SizedBox(
+                  width: logicalWidth,
+                  height: logicalHeight,
+                  child: Transform.scale(
+                    scale: 0.5,
+                    child: CameraPreview(controller),
+                  ),
                 ),
               ),
             ),
