@@ -297,6 +297,10 @@ class _StreamScreenState extends State<StreamScreen> {
             ],
           ),
         ),
+        Divider(
+          color: Colors.white,
+          height: 3,
+        ),
         Expanded(
           child: ClipRect(
             child: OverflowBox(
@@ -365,6 +369,10 @@ class _StreamScreenState extends State<StreamScreen> {
                   ],
                 ),
               ),
+              VerticalDivider(
+                color: Colors.white,
+                width: 3,
+              ),
               Expanded(
                 child: Stack(
                   children: <Widget>[
@@ -395,6 +403,10 @@ class _StreamScreenState extends State<StreamScreen> {
               ),
             ],
           ),
+        ),
+        Divider(
+          color: Colors.white,
+          height: 3,
         ),
         Expanded(
           child: ClipRect(
@@ -464,6 +476,10 @@ class _StreamScreenState extends State<StreamScreen> {
                   ],
                 ),
               ),
+              VerticalDivider(
+                color: Colors.white,
+                width: 3,
+              ),
               Expanded(
                 child: Stack(
                   children: <Widget>[
@@ -495,6 +511,10 @@ class _StreamScreenState extends State<StreamScreen> {
             ],
           ),
         ),
+        Divider(
+          color: Colors.white,
+          height: 3,
+        ),
         Expanded(
           child: Row(
             children: <Widget>[
@@ -515,6 +535,10 @@ class _StreamScreenState extends State<StreamScreen> {
                     ),
                   ),
                 ),
+              ),
+              VerticalDivider(
+                color: Colors.white,
+                width: 3,
               ),
               Expanded(
                 child: Stack(
@@ -603,6 +627,10 @@ class _StreamScreenState extends State<StreamScreen> {
                       ],
                     ),
                   ),
+                  VerticalDivider(
+                    color: Colors.white,
+                    width: 3,
+                  ),
                   Expanded(
                     child: Stack(
                       children: <Widget>[
@@ -635,6 +663,10 @@ class _StreamScreenState extends State<StreamScreen> {
                 ],
               ),
             ),
+            Divider(
+              color: Colors.white,
+              height: 3,
+            ),
             Expanded(
               child: Row(
                 children: <Widget>[
@@ -666,6 +698,10 @@ class _StreamScreenState extends State<StreamScreen> {
                         ),
                       ],
                     ),
+                  ),
+                  VerticalDivider(
+                    color: Colors.white,
+                    width: 3,
                   ),
                   Expanded(
                     child: Stack(
