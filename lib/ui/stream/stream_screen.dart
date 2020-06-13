@@ -1,20 +1,37 @@
 import 'dart:ui';
 
 import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
+import 'package:Rose/utils/signaling.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../main.dart';
+import 'package:flutter_webrtc/webrtc.dart';
 
 class StreamScreen extends StatefulWidget {
-  StreamScreen({Key key}) : super(key: key);
+  StreamScreen({
+    Key key,
+    this.server,
+    this.sessionName,
+    this.userName,
+    this.secret,
+    this.iceServer,
+  }) : super(key: key);
+
+  final String server;
+  final String sessionName;
+  final String userName;
+  final String secret;
+  final String iceServer;
 
   @override
   _StreamScreenState createState() => _StreamScreenState();
 }
 
 class _StreamScreenState extends State<StreamScreen> {
+  final _localRenderer = new RTCVideoRenderer();
+  final _remoteRenderer = new RTCVideoRenderer();
+
+  Signaling _signaling;
   CameraController controller;
 
   List<Color> _listColor = [
@@ -28,23 +45,28 @@ class _StreamScreenState extends State<StreamScreen> {
   @override
   void initState() {
     super.initState();
-    controller = CameraController(
-      cameras[2],
-      ResolutionPreset.ultraHigh,
-    );
 
-    controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
+    initRenderers();
   }
 
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
+  Future<void> initRenderers() async {
+    await _localRenderer.initialize();
+    await _remoteRenderer.initialize();
+    _connect();
+  }
+
+  void _hangUp() {
+    if (_signaling != null) {
+      Navigator.of(context).pop();
+    }
+  }
+
+  void _switchCamera() {
+    _signaling.switchCamera();
+  }
+
+  void _muteMic() {
+    _signaling.muteMic();
   }
 
   @override
@@ -59,11 +81,12 @@ class _StreamScreenState extends State<StreamScreen> {
           child: BlocBuilder<StreamBloc, StreamState>(
             builder: (BuildContext context, StreamState state) {
               if (state is StreamInitial) {
-                return Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: CameraPreview(controller),
-                );
+                // return Container(
+                //   height: MediaQuery.of(context).size.height,
+                //   width: MediaQuery.of(context).size.width,
+                //   child: RTCVideoView(_localRenderer),
+                // );
+                return _buildTwoPeopleView(context);
               } else if (state is TwoPeopleOnStream) {
                 return _buildTwoPeopleView(context);
               } else if (state is ThreePeopleOnStream) {
@@ -99,7 +122,7 @@ class _StreamScreenState extends State<StreamScreen> {
             IconButton(
               onPressed: () {
                 _blocProvider..add(StreamClosed());
-                Navigator.pop(context);
+                _hangUp();
               },
               icon: Stack(
                 children: <Widget>[
@@ -153,12 +176,30 @@ class _StreamScreenState extends State<StreamScreen> {
             ),
           ),
         ),
+        SizedBox(
+          width: 200.0,
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              FloatingActionButton(
+                child: const Icon(Icons.switch_camera),
+                onPressed: _switchCamera,
+                heroTag: "btn_switchCamera",
+              ),
+              FloatingActionButton(
+                child: const Icon(Icons.mic_off),
+                onPressed: _muteMic,
+                heroTag: "btn_muteMic",
+              ),
+            ],
+          ),
+        ),
         BlocBuilder<StreamBloc, StreamState>(
           builder: (BuildContext context, StreamState state) {
             if (state is StreamInitial) {
               return _buildFloatingActionButton();
             } else {
-              return Container();
+              return Offstage();
             }
           },
         ),
@@ -232,12 +273,7 @@ class _StreamScreenState extends State<StreamScreen> {
           child: Stack(
             children: <Widget>[
               Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: ExactAssetImage('assets/person.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                child: RTCVideoView(_remoteRenderer),
               ),
               ClipRect(
                 child: BackdropFilter(
@@ -257,10 +293,7 @@ class _StreamScreenState extends State<StreamScreen> {
           ),
         ),
         Expanded(
-          child: AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: CameraPreview(controller),
-          ),
+          child: RTCVideoView(_localRenderer),
         ),
       ],
     );
@@ -601,6 +634,69 @@ class _StreamScreenState extends State<StreamScreen> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _signaling?.close();
+    _localRenderer?.dispose();
+    _remoteRenderer?.dispose();
+    print('◤◢◤◢◤◢◤◢◤◢◤ dispose() All!!! ◤◢◤◢◤◢◤◢◤◢◤');
+    controller?.dispose();
+  }
+
+  Future<void> _connect() async {
+    if (_signaling == null) {
+      // Инициализация Signaling
+      _signaling = new Signaling(
+        widget.server,
+        widget.secret,
+        widget.userName,
+        widget.iceServer,
+      );
+
+      // Создание сессии
+      final String sessiondId =
+          await _signaling.createWebRtcSession(sessionId: widget.sessionName);
+      print('◤◢◤◢◤◢◤◢◤◢◤ sessiondId: $sessiondId  ◤◢◤◢◤◢◤◢◤◢◤');
+
+      // Генерация токена
+      final String token =
+          await _signaling.createWebRtcToken(sessionId: sessiondId);
+      print('◤◢◤◢◤◢◤◢◤◢◤ token: $token  ◤◢◤◢◤◢◤◢◤◢◤');
+
+      // Подключение к WebSocket'у
+      await _signaling.connect();
+
+      _signaling.onStateChange = (SignalingState state) {
+        print('_signaling.onStateChange: $state');
+
+        switch (state) {
+          case SignalingState.CallStateNew:
+            break;
+          case SignalingState.CallStateBye:
+            break;
+          default:
+            break;
+        }
+      };
+
+      _signaling.onLocalStream = ((stream) {
+        print('onLocalStream: ${stream.id}');
+        _localRenderer.srcObject = stream;
+      });
+
+      _signaling.onAddRemoteStream = ((stream) {
+        print('onAddRemoteStream: ${stream.id}');
+        _remoteRenderer.srcObject = stream;
+      });
+
+      _signaling.onRemoveRemoteStream = ((stream) {
+        print('onRemoveRemoteStream');
+        _remoteRenderer.srcObject = null;
+      });
+    }
   }
 }
 
