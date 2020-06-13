@@ -17,6 +17,7 @@ dependencies:
   flutter_bloc: ^4.0.0
   equatable: ^1.2.0
   camera: ^0.5.8+2
+  flappy_search_bar: ^1.7.2
 
 
 dev_dependencies:

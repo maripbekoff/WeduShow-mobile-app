@@ -11,7 +11,6 @@ class SignInInitial extends SignInState {
 
 class SignInLoading extends SignInState {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
@@ -21,7 +20,6 @@ class SignInSuccess extends SignInState {
   FirebaseUser user;
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
@@ -31,6 +29,5 @@ class SignInFailure extends SignInState {
   String error;
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }

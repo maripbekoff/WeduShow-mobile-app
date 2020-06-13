@@ -11,7 +11,6 @@ class AuthInitial extends AuthState {
 
 class AuthUninit extends AuthState {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
@@ -21,18 +20,15 @@ class Autheticated extends AuthState {
   Autheticated({this.firebaseUser});
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class UnAutheticated extends AuthState {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class AuthLoading extends AuthState {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }

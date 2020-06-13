@@ -1,8 +1,7 @@
-import 'dart:io';
-import 'dart:math';
 import 'dart:ui';
-
 import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
+import 'package:Rose/ui/stream/list_of_people.dart';
+import 'widgets/people_value_ui.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,22 +18,12 @@ class StreamScreen extends StatefulWidget {
 class _StreamScreenState extends State<StreamScreen> {
   CameraController controller;
 
-  bool _buttonPressed = false;
-
-  List<Color> _listColor = [
-    Colors.blue,
-    Colors.red,
-    Colors.yellow,
-    Colors.green,
-    Colors.purple,
-  ];
-
   @override
   void initState() {
     super.initState();
     controller = CameraController(
       cameras[2],
-      ResolutionPreset.ultraHigh,
+      ResolutionPreset.veryHigh,
     );
 
     controller.initialize().then((_) {
@@ -55,6 +44,8 @@ class _StreamScreenState extends State<StreamScreen> {
   Widget build(BuildContext context) {
     StreamBloc _blocProvider = BlocProvider.of<StreamBloc>(context);
 
+    PeopleValueUI _peopleValueUI = PeopleValueUI();
+
     Widget _firstView = Stack(
       children: <Widget>[
         Container(
@@ -69,13 +60,13 @@ class _StreamScreenState extends State<StreamScreen> {
                   child: CameraPreview(controller),
                 );
               } else if (state is TwoPeopleOnStream) {
-                return _buildTwoPeopleView(context);
+                return _peopleValueUI.buildTwoPeopleView(context, controller);
               } else if (state is ThreePeopleOnStream) {
-                return _buildThreePeopleView();
+                return _peopleValueUI.buildThreePeopleView(context, controller);
               } else if (state is FourPeopleOnStream) {
-                return _buildFourPeopleView();
+                return _peopleValueUI.buildFourPeopleView(context, controller);
               } else if (state is FivePeopleOnStream) {
-                return _buildFivePeopleView(context);
+                return _peopleValueUI.buildFivePeopleView(context, controller);
               }
             },
           ),
@@ -133,7 +124,12 @@ class _StreamScreenState extends State<StreamScreen> {
               child: InkWell(
                 borderRadius: BorderRadius.circular(1000.0),
                 onTap: () {
-                  _blocProvider..add(ButtonPressed());
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => PeopleList(),
+                    ),
+                  );
                 },
                 child: Padding(
                   padding: EdgeInsets.all(20),
@@ -161,7 +157,7 @@ class _StreamScreenState extends State<StreamScreen> {
         BlocBuilder<StreamBloc, StreamState>(
           builder: (BuildContext context, StreamState state) {
             if (state is StreamInitial) {
-              return _buildFloatingActionButton();
+              return _peopleValueUI.buildFloatingActionButton();
             } else {
               return Container();
             }
@@ -184,597 +180,24 @@ class _StreamScreenState extends State<StreamScreen> {
               tabs: <Widget>[
                 Text("Участники"),
                 Text("Виджеты"),
-                Text("Викторины")
+                Text("Настройки")
               ],
             ),
           ),
           body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
               _firstView,
               Center(
                 child: Text("Виджеты"),
               ),
               Center(
-                child: Text("Викторины"),
+                child: Text("Настройки"),
               ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Widget _buildFloatingActionButton() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 50),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Material(
-          type: MaterialType.transparency,
-          child: Ink(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.redAccent, width: 4.0),
-              color: Colors.black26,
-              shape: BoxShape.circle,
-            ),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(1000.0),
-              onTap: () {},
-              child: Padding(
-                padding: EdgeInsets.all(25.0),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTwoPeopleView(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double adjustConstant = max(
-        size.width /
-            min(controller.value.previewSize.width,
-                controller.value.previewSize.height),
-        size.height /
-            max(controller.value.previewSize.width,
-                controller.value.previewSize.height));
-    double logicalHeight = max(controller.value.previewSize.width,
-            controller.value.previewSize.height) *
-        adjustConstant;
-    double logicalWidth = min(controller.value.previewSize.width,
-            controller.value.previewSize.height) *
-        adjustConstant;
-
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Stack(
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: ExactAssetImage('assets/person.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              ClipRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  child: Container(
-                    color: Colors.black.withOpacity(0),
-                  ),
-                ),
-              ),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage: ExactAssetImage('assets/person.jpg'),
-                      radius: 50,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Барак Обама",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      "ЗАЖМИТЕ ЧТОБЫ УДАЛИТЬ ГОСТЯ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Divider(
-          color: Colors.white,
-          height: 3,
-        ),
-        Expanded(
-          child: ClipRect(
-            child: OverflowBox(
-              minHeight: 0.0,
-              minWidth: 0.0,
-              maxHeight: logicalHeight,
-              maxWidth: logicalWidth,
-              child: SizedBox(
-                width: logicalWidth,
-                height: logicalHeight,
-                child: CameraPreview(controller),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildThreePeopleView() {
-    Size size = MediaQuery.of(context).size;
-    double adjustConstant = max(
-        size.width /
-            min(controller.value.previewSize.width,
-                controller.value.previewSize.height),
-        size.height /
-            max(controller.value.previewSize.width,
-                controller.value.previewSize.height));
-    double logicalHeight = max(controller.value.previewSize.width,
-            controller.value.previewSize.height) *
-        adjustConstant;
-    double logicalWidth = min(controller.value.previewSize.width,
-            controller.value.previewSize.height) *
-        adjustConstant;
-
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: ExactAssetImage('assets/person.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            color: Colors.black.withOpacity(0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: CircleAvatar(
-                        backgroundImage: ExactAssetImage('assets/person.jpg'),
-                        radius: 50,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              VerticalDivider(
-                color: Colors.white,
-                width: 3,
-              ),
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: ExactAssetImage('assets/person.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            color: Colors.black.withOpacity(0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: CircleAvatar(
-                        backgroundImage: ExactAssetImage('assets/person.jpg'),
-                        radius: 50,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Divider(
-          color: Colors.white,
-          height: 3,
-        ),
-        Expanded(
-          child: ClipRect(
-            child: OverflowBox(
-              minHeight: 0.0,
-              minWidth: 0.0,
-              maxHeight: logicalHeight,
-              maxWidth: logicalWidth,
-              child: SizedBox(
-                width: logicalWidth,
-                height: logicalHeight,
-                child: CameraPreview(controller),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFourPeopleView() {
-    Size size = MediaQuery.of(context).size;
-    double adjustConstant = max(
-        size.width /
-            min(controller.value.previewSize.width,
-                controller.value.previewSize.height),
-        size.height /
-            max(controller.value.previewSize.width,
-                controller.value.previewSize.height));
-    double logicalHeight = max(controller.value.previewSize.width,
-            controller.value.previewSize.height) *
-        adjustConstant;
-    double logicalWidth = min(controller.value.previewSize.width,
-            controller.value.previewSize.height) *
-        adjustConstant;
-
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: ExactAssetImage('assets/person.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            color: Colors.black.withOpacity(0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: CircleAvatar(
-                        backgroundImage: ExactAssetImage('assets/person.jpg'),
-                        radius: 50,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              VerticalDivider(
-                color: Colors.white,
-                width: 3,
-              ),
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: ExactAssetImage('assets/person.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            color: Colors.black.withOpacity(0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: CircleAvatar(
-                        backgroundImage: ExactAssetImage('assets/person.jpg'),
-                        radius: 50,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Divider(
-          color: Colors.white,
-          height: 3,
-        ),
-        Expanded(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: ClipRect(
-                  child: OverflowBox(
-                    minHeight: 0.0,
-                    minWidth: 0.0,
-                    maxHeight: logicalHeight,
-                    maxWidth: logicalWidth,
-                    child: SizedBox(
-                      width: logicalWidth,
-                      height: logicalHeight,
-                      child: Transform.scale(
-                        scale: 0.5,
-                        child: CameraPreview(controller),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              VerticalDivider(
-                color: Colors.white,
-                width: 3,
-              ),
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: ExactAssetImage('assets/person.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            color: Colors.black.withOpacity(0),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: CircleAvatar(
-                        backgroundImage: ExactAssetImage('assets/person.jpg'),
-                        radius: 50,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFivePeopleView(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double adjustConstant = max(
-        size.width /
-            min(controller.value.previewSize.width,
-                controller.value.previewSize.height),
-        size.height /
-            max(controller.value.previewSize.width,
-                controller.value.previewSize.height));
-    double logicalHeight = max(controller.value.previewSize.width,
-            controller.value.previewSize.height) *
-        adjustConstant;
-    double logicalWidth = min(controller.value.previewSize.width,
-            controller.value.previewSize.height) *
-        adjustConstant;
-
-    return Stack(
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: ExactAssetImage('assets/person.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                              child: Container(
-                                color: Colors.black.withOpacity(0),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: CircleAvatar(
-                            backgroundImage:
-                                ExactAssetImage('assets/person.jpg'),
-                            radius: 50,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  VerticalDivider(
-                    color: Colors.white,
-                    width: 3,
-                  ),
-                  Expanded(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: ExactAssetImage('assets/person.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                              child: Container(
-                                color: Colors.black.withOpacity(0),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: CircleAvatar(
-                            backgroundImage:
-                                ExactAssetImage('assets/person.jpg'),
-                            radius: 50,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              color: Colors.white,
-              height: 3,
-            ),
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: ExactAssetImage('assets/person.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                              child: Container(
-                                color: Colors.black.withOpacity(0),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: CircleAvatar(
-                            backgroundImage:
-                                ExactAssetImage('assets/person.jpg'),
-                            radius: 50,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  VerticalDivider(
-                    color: Colors.white,
-                    width: 3,
-                  ),
-                  Expanded(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: ExactAssetImage('assets/person.jpg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                              child: Container(
-                                color: Colors.black.withOpacity(0),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: CircleAvatar(
-                            backgroundImage:
-                                ExactAssetImage('assets/person.jpg'),
-                            radius: 50,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        Center(
-          child: CircleAvatar(
-            radius: 100,
-            child: ClipOval(
-              child: OverflowBox(
-                minHeight: 0.0,
-                minWidth: 0.0,
-                maxHeight: logicalHeight,
-                maxWidth: logicalWidth,
-                child: SizedBox(
-                  width: logicalWidth,
-                  height: logicalHeight,
-                  child: Transform.scale(
-                    scale: 0.5,
-                    child: CameraPreview(controller),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class TwoPeopleViewClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = new Path();
-    path.addRect(
-      Rect.fromPoints(Offset(0, 0), Offset(size.width, size.height)),
-    );
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
   }
 }
