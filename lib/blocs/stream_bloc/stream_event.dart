@@ -6,12 +6,10 @@ abstract class StreamEvent extends Equatable {
 
 class ButtonPressed extends StreamEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class StreamClosed extends StreamEvent {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }

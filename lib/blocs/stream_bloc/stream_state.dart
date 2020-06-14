@@ -11,24 +11,20 @@ class StreamInitial extends StreamState {
 
 class TwoPeopleOnStream extends StreamState {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class ThreePeopleOnStream extends StreamState {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class FourPeopleOnStream extends StreamState {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class FivePeopleOnStream extends StreamState {
   @override
-  // TODO: implement props
   List<Object> get props => throw UnimplementedError();
 }

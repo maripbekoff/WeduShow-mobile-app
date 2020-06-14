@@ -10,6 +10,5 @@ class ButtonPressed extends RegEvent {
   String email, password, name;
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }

@@ -9,6 +9,5 @@ class ButtonPressed extends SignInEvent {
   String email, password;
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }

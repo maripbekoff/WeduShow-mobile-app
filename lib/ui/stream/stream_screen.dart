@@ -1,7 +1,8 @@
 import 'dart:ui';
-
 import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
 import 'package:Rose/utils/signaling.dart';
+import 'package:Rose/ui/stream/list_of_people.dart';
+import 'widgets/people_value_ui.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,18 +35,9 @@ class _StreamScreenState extends State<StreamScreen> {
   Signaling _signaling;
   CameraController controller;
 
-  List<Color> _listColor = [
-    Colors.blue,
-    Colors.red,
-    Colors.yellow,
-    Colors.green,
-    Colors.purple,
-  ];
-
   @override
   void initState() {
     super.initState();
-
     initRenderers();
   }
 
@@ -73,6 +65,8 @@ class _StreamScreenState extends State<StreamScreen> {
   Widget build(BuildContext context) {
     StreamBloc _blocProvider = BlocProvider.of<StreamBloc>(context);
 
+    PeopleValueUI _peopleValueUI = PeopleValueUI();
+
     Widget _firstView = Stack(
       children: <Widget>[
         Container(
@@ -88,13 +82,13 @@ class _StreamScreenState extends State<StreamScreen> {
                 // );
                 return _buildTwoPeopleView(context);
               } else if (state is TwoPeopleOnStream) {
-                return _buildTwoPeopleView(context);
+                return _peopleValueUI.buildTwoPeopleView(context, controller);
               } else if (state is ThreePeopleOnStream) {
-                return _buildThreePeopleView();
+                return _peopleValueUI.buildThreePeopleView(context, controller);
               } else if (state is FourPeopleOnStream) {
-                return _buildFourPeopleView();
+                return _peopleValueUI.buildFourPeopleView(context, controller);
               } else if (state is FivePeopleOnStream) {
-                return _buildFivePeopleView(context);
+                return _peopleValueUI.buildFivePeopleView(context, controller);
               }
             },
           ),
@@ -123,6 +117,8 @@ class _StreamScreenState extends State<StreamScreen> {
               onPressed: () {
                 _blocProvider..add(StreamClosed());
                 _hangUp();
+                Future.delayed(const Duration(seconds: 1),
+                    () => _blocProvider..add(StreamClosed()));
               },
               icon: Stack(
                 children: <Widget>[
@@ -151,7 +147,12 @@ class _StreamScreenState extends State<StreamScreen> {
               child: InkWell(
                 borderRadius: BorderRadius.circular(1000.0),
                 onTap: () {
-                  _blocProvider..add(ButtonPressed());
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => PeopleList(),
+                    ),
+                  );
                 },
                 child: Padding(
                   padding: EdgeInsets.all(20),
@@ -197,7 +198,7 @@ class _StreamScreenState extends State<StreamScreen> {
         BlocBuilder<StreamBloc, StreamState>(
           builder: (BuildContext context, StreamState state) {
             if (state is StreamInitial) {
-              return _buildFloatingActionButton();
+              return _peopleValueUI.buildFloatingActionButton();
             } else {
               return Offstage();
             }
@@ -220,18 +221,19 @@ class _StreamScreenState extends State<StreamScreen> {
               tabs: <Widget>[
                 Text("Участники"),
                 Text("Виджеты"),
-                Text("Викторины")
+                Text("Настройки")
               ],
             ),
           ),
           body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
               _firstView,
               Center(
                 child: Text("Виджеты"),
               ),
               Center(
-                child: Text("Викторины"),
+                child: Text("Настройки"),
               ),
             ],
           ),

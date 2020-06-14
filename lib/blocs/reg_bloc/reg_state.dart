@@ -11,7 +11,6 @@ class RegInitial extends RegState {
 
 class RegLoading extends RegState {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
@@ -22,7 +21,6 @@ class RegSuccess extends RegState {
   FirebaseUser firebaseUser;
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
@@ -32,6 +30,5 @@ class RegFailure extends RegState {
   String error;
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
