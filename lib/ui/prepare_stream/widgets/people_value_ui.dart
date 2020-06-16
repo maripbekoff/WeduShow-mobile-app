@@ -4,6 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class PeopleValueUI {
+  static const double _thickness = 0.5;
+
   Widget buildFloatingActionButton() {
     return Container(
       margin: EdgeInsets.only(bottom: 50),
@@ -99,7 +101,7 @@ class PeopleValueUI {
         ),
         Divider(
           color: Colors.white,
-          height: 3,
+          height: _thickness,
         ),
         Expanded(
           child: ClipRect(
@@ -194,7 +196,7 @@ class PeopleValueUI {
               ),
               VerticalDivider(
                 color: Colors.white,
-                width: 3,
+                width: _thickness,
               ),
               Expanded(
                 child: Stack(
@@ -251,7 +253,7 @@ class PeopleValueUI {
         ),
         Divider(
           color: Colors.white,
-          height: 3,
+          height: _thickness,
         ),
         Expanded(
           child: ClipRect(
@@ -346,7 +348,7 @@ class PeopleValueUI {
               ),
               VerticalDivider(
                 color: Colors.white,
-                width: 3,
+                width: _thickness,
               ),
               Expanded(
                 child: Stack(
@@ -403,7 +405,7 @@ class PeopleValueUI {
         ),
         Divider(
           color: Colors.white,
-          height: 3,
+          height: _thickness,
         ),
         Expanded(
           child: Row(
@@ -428,7 +430,7 @@ class PeopleValueUI {
               ),
               VerticalDivider(
                 color: Colors.white,
-                width: 3,
+                width: _thickness,
               ),
               Expanded(
                 child: Stack(
@@ -563,7 +565,7 @@ class PeopleValueUI {
                   ),
                   VerticalDivider(
                     color: Colors.white,
-                    width: 3,
+                    width: _thickness,
                   ),
                   Expanded(
                     child: Stack(
@@ -620,7 +622,7 @@ class PeopleValueUI {
             ),
             Divider(
               color: Colors.white,
-              height: 3,
+              height: _thickness,
             ),
             Expanded(
               child: Row(
@@ -677,7 +679,7 @@ class PeopleValueUI {
                   ),
                   VerticalDivider(
                     color: Colors.white,
-                    width: 3,
+                    width: _thickness,
                   ),
                   Expanded(
                     child: Stack(
