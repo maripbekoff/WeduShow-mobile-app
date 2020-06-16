@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
 import 'list_of_people.dart';
 import 'widgets/people_value_ui.dart';
@@ -40,6 +39,12 @@ class _PrepareStreamScreenState extends State<PrepareStreamScreen> {
     super.dispose();
   }
 
+  List<int> indexes = [0, 1];
+
+  void _buttonPressed() {
+    indexes = List.from(indexes.reversed);
+  }
+
   @override
   Widget build(BuildContext context) {
     StreamBloc _blocProvider = BlocProvider.of<StreamBloc>(context);
@@ -60,7 +65,12 @@ class _PrepareStreamScreenState extends State<PrepareStreamScreen> {
                   child: CameraPreview(controller),
                 );
               } else if (state is TwoPeopleOnStream) {
-                return _peopleValueUI.buildTwoPeopleView(context, controller);
+                return _peopleValueUI.buildTwoPeopleView(
+                  context,
+                  controller,
+                  indexes[0],
+                  indexes[1],
+                );
               } else if (state is ThreePeopleOnStream) {
                 return _peopleValueUI.buildThreePeopleView(context, controller);
               } else if (state is FourPeopleOnStream) {
@@ -170,6 +180,14 @@ class _PrepareStreamScreenState extends State<PrepareStreamScreen> {
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                _buttonPressed();
+              });
+            },
+            child: Icon(Icons.refresh),
+          ),
           bottomNavigationBar: Material(
             color: Colors.black,
             child: TabBar(

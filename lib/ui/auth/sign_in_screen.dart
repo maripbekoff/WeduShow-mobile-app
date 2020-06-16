@@ -1,6 +1,6 @@
 import 'package:Rose/blocs/sign_in_bloc/signin_bloc.dart';
 import 'package:Rose/repos/user_repo.dart';
-import 'package:Rose/main_screen.dart';
+import 'package:Rose/ui/main_screen.dart';
 import 'package:Rose/ui/auth/reg_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

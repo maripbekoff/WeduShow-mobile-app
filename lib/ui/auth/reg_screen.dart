@@ -1,5 +1,5 @@
 import 'package:Rose/blocs/reg_bloc/reg_bloc.dart';
-import 'package:Rose/main_screen.dart';
+import 'package:Rose/ui/main_screen.dart';
 import 'package:Rose/repos/user_repo.dart';
 import 'package:Rose/ui/auth/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';

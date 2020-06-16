@@ -1,6 +1,6 @@
 import 'package:Rose/blocs/auth_bloc/auth_bloc.dart';
 import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
-import 'package:Rose/main_screen.dart';
+import 'package:Rose/ui/main_screen.dart';
 import 'package:Rose/ui/auth/sign_in_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';

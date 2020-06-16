@@ -32,7 +32,12 @@ class PeopleValueUI {
     );
   }
 
-  Widget buildTwoPeopleView(BuildContext context, CameraController controller) {
+  Widget buildTwoPeopleView(
+    BuildContext context,
+    CameraController controller,
+    int index1,
+    int index2,
+  ) {
     Size size = MediaQuery.of(context).size;
     double adjustConstant = max(
         size.width /
@@ -48,75 +53,80 @@ class PeopleValueUI {
             controller.value.previewSize.height) *
         adjustConstant;
 
+    List<Widget> _widgetList = [
+      Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: ExactAssetImage('assets/person.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                color: Colors.black.withOpacity(0),
+              ),
+            ),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundImage: ExactAssetImage('assets/person.jpg'),
+                  radius: 50,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Барак Обама",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  "ЗАЖМИТЕ ЧТОБЫ УДАЛИТЬ ГОСТЯ",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+      ClipRect(
+        child: OverflowBox(
+          minHeight: 0.0,
+          minWidth: 0.0,
+          maxHeight: logicalHeight,
+          maxWidth: logicalWidth,
+          child: SizedBox(
+            width: logicalWidth,
+            height: logicalHeight,
+            child: CameraPreview(controller),
+          ),
+        ),
+      ),
+    ];
+
     return Column(
       children: <Widget>[
         Expanded(
-          child: Stack(
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: ExactAssetImage('assets/person.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              ClipRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  child: Container(
-                    color: Colors.black.withOpacity(0),
-                  ),
-                ),
-              ),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage: ExactAssetImage('assets/person.jpg'),
-                      radius: 50,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Барак Обама",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      "ЗАЖМИТЕ ЧТОБЫ УДАЛИТЬ ГОСТЯ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
+          child: _widgetList[index1],
         ),
         Divider(
           color: Colors.white,
           height: _thickness,
         ),
         Expanded(
-          child: ClipRect(
-            child: OverflowBox(
-              minHeight: 0.0,
-              minWidth: 0.0,
-              maxHeight: logicalHeight,
-              maxWidth: logicalWidth,
-              child: SizedBox(
-                width: logicalWidth,
-                height: logicalHeight,
-                child: CameraPreview(controller),
-              ),
-            ),
-          ),
+          child: _widgetList[index2],
         ),
       ],
     );
