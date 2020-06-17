@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserRepo {
   FirebaseAuth _auth = FirebaseAuth.instance;
+  final _firestore = Firestore.instance;
   UserUpdateInfo _updateInfo = UserUpdateInfo();
 
   UserRepo() {
@@ -33,8 +35,10 @@ class UserRepo {
     var result = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = await _auth.currentUser();
-    _updateInfo.displayName = name;
-    await user.updateProfile(_updateInfo);
+    await _firestore.collection('users').document(user.uid).setData({
+      'name': name,
+      'photoUrl': 'gs://wedushow.appspot.com/default_profile_photo.png'
+    });
     return result;
   }
 }

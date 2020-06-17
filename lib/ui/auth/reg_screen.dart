@@ -43,6 +43,7 @@ class RegScreen extends StatelessWidget {
             children: <Widget>[
               TextFormField(
                 controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(hintText: "email"),
                 validator: (val) => val.isEmpty ? 'Enter an email' : null,
               ),
