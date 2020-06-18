@@ -35,10 +35,13 @@ class UserRepo {
     var result = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = await _auth.currentUser();
-    await _firestore.collection('users').document(user.uid).setData({
-      'name': name,
-      'photoUrl': 'gs://wedushow.appspot.com/default_profile_photo.png'
-    });
+    await _firestore.collection('users').document(user.uid).setData(
+      {
+        'name': name,
+        'photoUrl': 'gs://wedushow.appspot.com/default_profile_photo.png',
+        'friends': <String>[],
+      },
+    );
     return result;
   }
 }

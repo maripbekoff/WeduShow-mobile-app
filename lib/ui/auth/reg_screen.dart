@@ -26,6 +26,7 @@ class RegScreen extends StatelessWidget {
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _repeatPasswordController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
 
   @override
@@ -52,7 +53,7 @@ class RegScreen extends StatelessWidget {
                 obscureText: true,
                 controller: _passwordController,
                 decoration: InputDecoration(hintText: "password"),
-                validator: (val) => val.isEmpty ? 'Enter an password' : null,
+                validator: (val) => val.length < 6 ? 'Too short' : null,
               ),
               SizedBox(height: 20),
               TextFormField(
