@@ -25,6 +25,8 @@ dependencies:
   url_launcher: ^5.4.10
   shared_preferences: ^0.5.7+3
   flappy_search_bar: ^1.7.2
+  flutter_range_slider: ^1.4.0
+  carousel_slider: ^2.1.0
 
 
 dev_dependencies:

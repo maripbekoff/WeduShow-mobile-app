@@ -1,5 +1,4 @@
 import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
-import 'package:Rose/main.dart';
 import 'package:Rose/ui/prepare_stream/views/list_of_people.dart';
 import 'package:Rose/ui/prepare_stream/widgets/guests_view_widgets.dart';
 import 'package:camera/camera.dart';
