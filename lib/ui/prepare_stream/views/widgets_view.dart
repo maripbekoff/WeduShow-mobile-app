@@ -1,4 +1,5 @@
 import 'package:Rose/main.dart';
+import 'package:Rose/ui/prepare_stream/widgets/widgets_view_widgets.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class WidgetsView extends StatefulWidget {
 class _WidgetsViewState extends State<WidgetsView> {
   _WidgetsViewState({this.cameraController});
   CameraController cameraController;
+  WidgetsViewWidgets _viewWidgets = WidgetsViewWidgets();
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,13 @@ class _WidgetsViewState extends State<WidgetsView> {
                     type: MaterialType.button,
                     color: Colors.transparent,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              _viewWidgets.victorineDialog,
+                        );
+                      },
                       iconSize: 55,
                       icon: Image.asset('assets/icon_03.png'),
                     ),
