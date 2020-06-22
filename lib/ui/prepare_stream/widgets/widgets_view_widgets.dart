@@ -6,17 +6,40 @@ class WidgetsViewWidgets {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     child: Column(
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            FlatButton(
-              onPressed: () {},
-              child: Text("Сохранить"),
-            ),
-            Text("Викторина"),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              FlatButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {},
+                child: Text(
+                  "Сохранить",
+                  style: TextStyle(fontWeight: FontWeight.normal),
+                ),
+              ),
+              Text(
+                "Викторина",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              FlatButton(
+                padding: EdgeInsets.zero,
+                onPressed: null,
+                child: Container(),
+              ),
+            ],
+          ),
         ),
-        Divider(
-          color: Colors.black45,
+        Divider(color: Colors.black45),
+        Form(
+          child: Column(
+            children: <Widget>[
+              TextField(),
+            ],
+          ),
         ),
       ],
     ),
