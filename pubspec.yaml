@@ -18,6 +18,7 @@ dependencies:
   firebase_storage: ^3.1.6
   bloc: ^4.0.0
   flutter_bloc: ^4.0.0
+  flutter_form_bloc: ^0.14.0
   equatable: ^1.2.0
   camera: ^0.5.8+2
   html: 0.14.0+3
@@ -26,7 +27,7 @@ dependencies:
   shared_preferences: ^0.5.7+3
   flappy_search_bar: ^1.7.2
   flutter_range_slider: ^1.4.0
-  carousel_slider: ^2.1.0
+
 
 
 dev_dependencies:
