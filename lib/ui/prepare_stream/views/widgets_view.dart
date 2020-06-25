@@ -1,7 +1,6 @@
 import 'package:WeduShow/ui/prepare_stream/widgets/widgets_view_widgets.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WidgetsView extends StatefulWidget {
   WidgetsView({Key key, this.cameraController}) : super(key: key);
@@ -67,8 +66,7 @@ class _WidgetsViewState extends State<WidgetsView> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder: (BuildContext context) =>
-                              _viewWidgets.victorineDialog,
+                          builder: (BuildContext context) => VictorineDialog(),
                         );
                       },
                       iconSize: 55,
