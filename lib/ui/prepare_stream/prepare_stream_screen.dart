@@ -1,6 +1,6 @@
-import 'package:Rose/main.dart';
-import 'package:Rose/ui/prepare_stream/views/guests_view.dart';
-import 'package:Rose/ui/prepare_stream/views/widgets_view.dart';
+import 'package:WeduShow/main.dart';
+import 'package:WeduShow/ui/prepare_stream/views/guests_view.dart';
+import 'package:WeduShow/ui/prepare_stream/views/widgets_view.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 

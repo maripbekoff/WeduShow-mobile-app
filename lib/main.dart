@@ -1,7 +1,7 @@
-import 'package:Rose/blocs/auth_bloc/auth_bloc.dart';
-import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
-import 'package:Rose/ui/main_screen.dart';
-import 'package:Rose/ui/auth/sign_in_screen.dart';
+import 'package:WeduShow/blocs/auth_bloc/auth_bloc.dart';
+import 'package:WeduShow/blocs/stream_bloc/stream_bloc.dart';
+import 'package:WeduShow/ui/main_screen.dart';
+import 'package:WeduShow/ui/auth/sign_in_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Rose',
+        title: 'WeduShow',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,

@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-import 'package:Rose/utils/ApiClient.dart';
-import 'package:Rose/utils/RequestConfig.dart';
-import 'package:Rose/utils/rtc_ice_candidate.dart';
+import 'package:WeduShow/utils/ApiClient.dart';
+import 'package:WeduShow/utils/RequestConfig.dart';
+import 'package:WeduShow/utils/rtc_ice_candidate.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 

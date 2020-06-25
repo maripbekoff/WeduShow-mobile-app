@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'dart:io';
 
-import 'package:Rose/utils/RequestConfig.dart';
+import 'package:WeduShow/utils/RequestConfig.dart';
 
 class ApiClient {
   final HttpClient client = HttpClient();

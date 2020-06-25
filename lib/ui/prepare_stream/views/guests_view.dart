@@ -1,6 +1,6 @@
-import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
-import 'package:Rose/ui/prepare_stream/views/list_of_people.dart';
-import 'package:Rose/ui/prepare_stream/widgets/guests_view_widgets.dart';
+import 'package:WeduShow/blocs/stream_bloc/stream_bloc.dart';
+import 'package:WeduShow/ui/prepare_stream/views/list_of_people.dart';
+import 'package:WeduShow/ui/prepare_stream/widgets/guests_view_widgets.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

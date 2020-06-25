@@ -1,4 +1,4 @@
-import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
+import 'package:WeduShow/blocs/stream_bloc/stream_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

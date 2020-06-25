@@ -1,7 +1,7 @@
-import 'package:Rose/blocs/reg_bloc/reg_bloc.dart';
-import 'package:Rose/ui/main_screen.dart';
-import 'package:Rose/repos/user_repo.dart';
-import 'package:Rose/ui/auth/sign_in_screen.dart';
+import 'package:WeduShow/blocs/reg_bloc/reg_bloc.dart';
+import 'package:WeduShow/ui/main_screen.dart';
+import 'package:WeduShow/repos/user_repo.dart';
+import 'package:WeduShow/ui/auth/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

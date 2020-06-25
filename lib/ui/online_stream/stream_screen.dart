@@ -1,5 +1,5 @@
-import 'package:Rose/blocs/stream_bloc/stream_bloc.dart';
-import 'package:Rose/utils/signaling.dart';
+import 'package:WeduShow/blocs/stream_bloc/stream_bloc.dart';
+import 'package:WeduShow/utils/signaling.dart';
 import 'widgets/people_value_ui.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';

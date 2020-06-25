@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:Rose/repos/user_repo.dart';
-import 'package:Rose/ui/auth/sign_in_screen.dart';
-import 'package:Rose/ui/online_stream/stream_screen.dart';
-import 'package:Rose/ui/prepare_stream/prepare_stream_screen.dart';
+import 'package:WeduShow/repos/user_repo.dart';
+import 'package:WeduShow/ui/auth/sign_in_screen.dart';
+import 'package:WeduShow/ui/online_stream/stream_screen.dart';
+import 'package:WeduShow/ui/prepare_stream/prepare_stream_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
