@@ -20,6 +20,14 @@ class _VictorineDialogState extends State<VictorineDialog> {
   int _pageViewBuilderIndex;
   List<int> _pageValue = [1];
 
+  Color _checkCurrentPage(int index) {
+    if (_pageController.page.toInt() == index) {
+      return Colors.black;
+    } else {
+      return Colors.black12;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -96,6 +104,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
                             SizedBox(height: 25),
                             Container(
                               height: 200,
+                              // Anwsers list view builder
                               child: ListView.separated(
                                 primary: false,
                                 physics: NeverScrollableScrollPhysics(),
@@ -138,6 +147,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                     (BuildContext context, int index) =>
                                         SizedBox(height: 15),
                               ),
+                              // Anwsers list view builder END
                             ),
                             SizedBox(height: 25),
                             Text("Время на ответ"),
@@ -158,6 +168,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
                               children: <Widget>[
                                 SizedBox(
                                   height: 50,
+                                  // Pages horizontal list view builder
                                   child: ListView.builder(
                                     shrinkWrap: true,
                                     primary: false,
@@ -166,7 +177,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                     itemCount: _pageValue.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      _listViewBuilderIndex = index + 2;
+                                      _listViewBuilderIndex = index;
                                       return Center(
                                         child: InkWell(
                                           borderRadius:
@@ -177,12 +188,11 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                                 _pageValue.length == 10
                                                     ? 6.8
                                                     : 6.1),
-                                            // 9 - 6.8
-                                            // ...10 - 6.1
                                             child: Text(
                                               "${_pageValue[index]}",
                                               style: TextStyle(
                                                 fontSize: 18,
+                                                color: _checkCurrentPage(index),
                                               ),
                                             ),
                                           ),
@@ -190,6 +200,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                       );
                                     },
                                   ),
+                                  // Pages horizontal list view builder
                                 ),
                                 _pageValue.length <= 9
                                     ? Row(
@@ -198,8 +209,17 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                             padding: EdgeInsets.zero,
                                             icon: Icon(Icons.add),
                                             onPressed: () {
-                                              _pageValue.add(index + 2);
+                                              _textContollers.add(List.generate(
+                                                  4,
+                                                  (index) =>
+                                                      TextEditingController()));
+                                              _pageValue.add(
+                                                  _listViewBuilderIndex + 2);
                                               print(_pageValue);
+                                              _pageController.nextPage(
+                                                  duration: Duration(
+                                                      milliseconds: 400),
+                                                  curve: Curves.easeInOut);
                                               setState(() {});
                                             },
                                           ),
@@ -211,6 +231,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                                       color: Colors.red),
                                                   onPressed: () {
                                                     _pageValue.removeLast();
+                                                    _listViewBuilderIndex -= 1;
                                                     print(_pageValue);
                                                     setState(() {});
                                                   },
@@ -223,6 +244,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                             color: Colors.red),
                                         onPressed: () {
                                           _pageValue.removeLast();
+                                          _listViewBuilderIndex -= 2;
                                           print(_pageValue);
                                           setState(() {});
                                         },

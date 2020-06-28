@@ -2,6 +2,8 @@ import 'package:WeduShow/ui/prepare_stream/widgets/widgets_view_widgets.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
+// Invite people to "prepare stream screen"
+
 class WidgetsView extends StatefulWidget {
   WidgetsView({Key key, this.cameraController}) : super(key: key);
   CameraController cameraController;
