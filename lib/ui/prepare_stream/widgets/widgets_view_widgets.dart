@@ -11,20 +11,24 @@ class VictorineDialog extends StatefulWidget {
 }
 
 class _VictorineDialogState extends State<VictorineDialog> {
-  PageController _pageController = PageController();
+  PageController _pageController = PageController(initialPage: 0);
   List _textContollers = List.generate(
       1, (index) => List.generate(4, (index) => TextEditingController()));
-  int _groupValue;
+  List<int> _groupValues = [null];
   double _sliderValue = 5;
   int _listViewBuilderIndex;
   int _pageViewBuilderIndex;
   List<int> _pageValue = [1];
 
   Color _checkCurrentPage(int index) {
-    if (_pageController.page.toInt() == index) {
-      return Colors.black;
+    if (_pageController.position.haveDimensions) {
+      if (_pageController.page.toInt() == index) {
+        return Colors.black;
+      } else {
+        return Colors.black12;
+      }
     } else {
-      return Colors.black12;
+      return null;
     }
   }
 
@@ -72,6 +76,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: _pageValue.length,
+                  physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     _pageViewBuilderIndex = index;
                     return SingleChildScrollView(
@@ -131,12 +136,15 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                         ),
                                         Radio(
                                           value: index,
-                                          groupValue: _groupValue,
+                                          groupValue: _groupValues[
+                                              _pageViewBuilderIndex],
                                           onChanged: (int value) {
                                             print(value);
                                             setState(() {
-                                              _groupValue = value;
+                                              _groupValues[_pageController.page
+                                                  .toInt()] = value;
                                             });
+                                            print(_groupValues);
                                           },
                                         ),
                                       ],
@@ -182,7 +190,11 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                         child: InkWell(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          onTap: () {},
+                                          onTap: () {
+                                            setState(() {
+                                              _pageController.jumpToPage(index);
+                                            });
+                                          },
                                           child: Padding(
                                             padding: EdgeInsets.all(
                                                 _pageValue.length == 10
@@ -215,11 +227,12 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                                       TextEditingController()));
                                               _pageValue.add(
                                                   _listViewBuilderIndex + 2);
+                                              _groupValues.add(null);
+                                              print(_groupValues);
                                               print(_pageValue);
-                                              _pageController.nextPage(
-                                                  duration: Duration(
-                                                      milliseconds: 400),
-                                                  curve: Curves.easeInOut);
+                                              _pageController.jumpToPage(
+                                                _pageValue.last,
+                                              );
                                               setState(() {});
                                             },
                                           ),
