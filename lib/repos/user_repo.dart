@@ -4,12 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class UserRepo {
   FirebaseAuth _auth = FirebaseAuth.instance;
   final _firestore = Firestore.instance;
-  UserUpdateInfo _updateInfo = UserUpdateInfo();
-
-  UserRepo() {
-    this._auth;
-    this._updateInfo;
-  }
 
   Future<FirebaseUser> signIn(String email, String password) async {
     var result = await _auth.signInWithEmailAndPassword(

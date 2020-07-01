@@ -1,3 +1,4 @@
+import 'package:WeduShow/repos/widget_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,13 +13,17 @@ class VictorineDialog extends StatefulWidget {
 
 class _VictorineDialogState extends State<VictorineDialog> {
   PageController _pageController = PageController(initialPage: 0);
-  List _textContollers = List.generate(
-      1, (index) => List.generate(4, (index) => TextEditingController()));
-  List<int> _groupValues = [null];
-  double _sliderValue = 5;
-  int _listViewBuilderIndex;
   int _pageViewBuilderIndex;
-  List<int> _pageValue = [1];
+  List _pageValues = [
+    [
+      List<TextEditingController>.generate(
+          4, (index) => TextEditingController()), // text controllers
+      null, // radios group value
+      5.00, // slider value
+    ],
+  ];
+
+  WidgetRepo _widgetRepo = WidgetRepo();
 
   Color _checkCurrentPage(int index) {
     if (_pageController.position.haveDimensions) {
@@ -40,7 +45,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height / 2,
+          height: MediaQuery.of(context).size.height / 1.5,
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
@@ -51,7 +56,10 @@ class _VictorineDialogState extends State<VictorineDialog> {
                   children: <Widget>[
                     FlatButton(
                       padding: EdgeInsets.zero,
-                      onPressed: () {},
+                      onPressed: () {
+                        _widgetRepo.createNewWidget(_pageValues);
+                        Navigator.pop(context);
+                      },
                       child: Text(
                         "Сохранить",
                         style: TextStyle(fontWeight: FontWeight.normal),
@@ -75,7 +83,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
-                  itemCount: _pageValue.length,
+                  itemCount: _pageValues.length,
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     _pageViewBuilderIndex = index;
@@ -85,7 +93,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
                         child: Column(
                           children: <Widget>[
                             TextFormField(
-                              controller: _textContollers[index][0],
+                              controller: _pageValues[index][0][0],
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(8),
                                 hintText: "Вопрос",
@@ -124,8 +132,8 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                       children: <Widget>[
                                         Flexible(
                                           child: TextFormField(
-                                            controller: _textContollers[
-                                                    _pageViewBuilderIndex]
+                                            controller: _pageValues[
+                                                    _pageViewBuilderIndex][0]
                                                 [index + 1],
                                             decoration: InputDecoration(
                                               contentPadding: EdgeInsets.all(8),
@@ -136,15 +144,14 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                         ),
                                         Radio(
                                           value: index,
-                                          groupValue: _groupValues[
-                                              _pageViewBuilderIndex],
-                                          onChanged: (int value) {
-                                            print(value);
+                                          groupValue:
+                                              _pageValues[_pageViewBuilderIndex]
+                                                  [1],
+                                          onChanged: (T) {
                                             setState(() {
-                                              _groupValues[_pageController.page
-                                                  .toInt()] = value;
+                                              _pageValues[_pageController.page
+                                                  .toInt()][1] = T;
                                             });
-                                            print(_groupValues);
                                           },
                                         ),
                                       ],
@@ -160,16 +167,16 @@ class _VictorineDialogState extends State<VictorineDialog> {
                             SizedBox(height: 25),
                             Text("Время на ответ"),
                             Slider(
-                              value: _sliderValue,
+                              value: _pageValues[index][2],
                               onChanged: (double value) {
                                 setState(() {
-                                  _sliderValue = value;
+                                  _pageValues[index][2] = value;
                                 });
                               },
                               min: 5,
                               max: 15,
                               divisions: 2,
-                              label: "${_sliderValue.toInt()} сек.",
+                              label: "${_pageValues[index][2].toInt()} сек.",
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -182,10 +189,9 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                     primary: false,
                                     physics: NeverScrollableScrollPhysics(),
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: _pageValue.length,
+                                    itemCount: _pageValues.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      _listViewBuilderIndex = index;
                                       return Center(
                                         child: InkWell(
                                           borderRadius:
@@ -197,11 +203,12 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                           },
                                           child: Padding(
                                             padding: EdgeInsets.all(
-                                                _pageValue.length == 10
+                                                _pageValues.length == 10
                                                     ? 6.8
                                                     : 6.1),
                                             child: Text(
-                                              "${_pageValue[index]}",
+                                              '${_pageValues.indexOf(_pageValues[index]) + 1}',
+                                              // "${_pageValues[index][0]}",
                                               style: TextStyle(
                                                 fontSize: 18,
                                                 color: _checkCurrentPage(index),
@@ -214,38 +221,41 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                   ),
                                   // Pages horizontal list view builder
                                 ),
-                                _pageValue.length <= 9
+                                _pageValues.length <= 9
                                     ? Row(
                                         children: <Widget>[
                                           IconButton(
                                             padding: EdgeInsets.zero,
                                             icon: Icon(Icons.add),
                                             onPressed: () {
-                                              _textContollers.add(List.generate(
-                                                  4,
-                                                  (index) =>
-                                                      TextEditingController()));
-                                              _pageValue.add(
-                                                  _listViewBuilderIndex + 2);
-                                              _groupValues.add(null);
-                                              print(_groupValues);
-                                              print(_pageValue);
+                                              _pageValues.add(
+                                                [
+                                                  List.generate(
+                                                      4,
+                                                      (index) =>
+                                                          TextEditingController()),
+                                                  null,
+                                                  5.00,
+                                                ],
+                                              );
                                               _pageController.jumpToPage(
-                                                _pageValue.last,
+                                                _pageValues.indexOf(
+                                                        _pageValues.last) +
+                                                    1,
                                               );
                                               setState(() {});
                                             },
                                           ),
-                                          _pageValue.length == 1
+                                          _pageValues.length == 1
                                               ? SizedBox()
                                               : IconButton(
                                                   padding: EdgeInsets.zero,
                                                   icon: Icon(Icons.delete,
                                                       color: Colors.red),
                                                   onPressed: () {
-                                                    _pageValue.removeLast();
-                                                    _listViewBuilderIndex -= 1;
-                                                    print(_pageValue);
+                                                    _pageValues.removeAt(
+                                                        _pageController.page
+                                                            .toInt());
                                                     setState(() {});
                                                   },
                                                 ),
@@ -256,9 +266,8 @@ class _VictorineDialogState extends State<VictorineDialog> {
                                         icon: Icon(Icons.delete,
                                             color: Colors.red),
                                         onPressed: () {
-                                          _pageValue.removeLast();
-                                          _listViewBuilderIndex -= 2;
-                                          print(_pageValue);
+                                          _pageValues.removeAt(
+                                              _pageController.page.toInt());
                                           setState(() {});
                                         },
                                       ),
