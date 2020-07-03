@@ -1,6 +1,5 @@
 import 'package:WeduShow/repos/user_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class WidgetRepo {
   UserRepo _userRepo = UserRepo();

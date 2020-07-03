@@ -13,6 +13,8 @@ class VictorineDialog extends StatefulWidget {
 
 class _VictorineDialogState extends State<VictorineDialog> {
   PageController _pageController = PageController(initialPage: 0);
+  final _formKey = GlobalKey<FormState>();
+
   int _pageViewBuilderIndex;
   List _pageValues = [
     [
@@ -45,7 +47,7 @@ class _VictorineDialogState extends State<VictorineDialog> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height / 1.5,
+          height: MediaQuery.of(context).size.height / 1.35,
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
@@ -57,8 +59,10 @@ class _VictorineDialogState extends State<VictorineDialog> {
                     FlatButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        _widgetRepo.createNewWidget(_pageValues);
-                        Navigator.pop(context);
+                        if (_formKey.currentState.validate()) {
+                          _widgetRepo.createNewWidget(_pageValues);
+                          Navigator.pop(context);
+                        }
                       },
                       child: Text(
                         "Сохранить",
@@ -87,193 +91,208 @@ class _VictorineDialogState extends State<VictorineDialog> {
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     _pageViewBuilderIndex = index;
-                    return SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: <Widget>[
-                            TextFormField(
-                              controller: _pageValues[index][0][0],
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(8),
-                                hintText: "Вопрос",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.black12,
+                    return Form(
+                      key: _formKey,
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: <Widget>[
+                              TextFormField(
+                                controller: _pageValues[index][0][0],
+                                validator: (value) => value.isEmpty
+                                    ? "Пожалуйста введите вопрос"
+                                    : null,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(8),
+                                  hintText: "Вопрос",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.black12,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.black12,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
-                                  borderRadius: BorderRadius.circular(30),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.black12,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 25),
-                            Container(
-                              height: 200,
-                              // Anwsers list view builder
-                              child: ListView.separated(
-                                primary: false,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: 3,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      border: Border.all(color: Colors.black12),
-                                    ),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Flexible(
-                                          child: TextFormField(
-                                            controller: _pageValues[
-                                                    _pageViewBuilderIndex][0]
-                                                [index + 1],
-                                            decoration: InputDecoration(
-                                              contentPadding: EdgeInsets.all(8),
-                                              hintText: "Ответ",
-                                              border: InputBorder.none,
+                              SizedBox(height: 25),
+                              Container(
+                                height: 270,
+                                // Anwsers list view builder
+                                child: ListView.separated(
+                                  primary: false,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: 3,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return RadioListTile(
+                                      value: index,
+                                      groupValue:
+                                          _pageValues[_pageViewBuilderIndex][1],
+                                      onChanged: (T) {
+                                        setState(() {
+                                          _pageValues[_pageController.page
+                                              .toInt()][1] = T;
+                                        });
+                                      },
+                                      title: TextFormField(
+                                        controller:
+                                            _pageValues[_pageViewBuilderIndex]
+                                                [0][index + 1],
+                                        validator: (value) => value.isEmpty
+                                            ? "Пожалуйста введите вопрос"
+                                            : null,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.all(8),
+                                          hintText: "Ответ",
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.black12,
                                             ),
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.black12,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(30),
                                           ),
                                         ),
-                                        Radio(
-                                          value: index,
-                                          groupValue:
-                                              _pageValues[_pageViewBuilderIndex]
-                                                  [1],
-                                          onChanged: (T) {
-                                            setState(() {
-                                              _pageValues[_pageController.page
-                                                  .toInt()][1] = T;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                separatorBuilder:
-                                    (BuildContext context, int index) =>
-                                        SizedBox(height: 15),
+                                      ),
+                                    );
+                                  },
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          SizedBox(height: 18),
+                                ),
                               ),
-                              // Anwsers list view builder END
-                            ),
-                            SizedBox(height: 25),
-                            Text("Время на ответ"),
-                            Slider(
-                              value: _pageValues[index][2],
-                              onChanged: (double value) {
-                                setState(() {
-                                  _pageValues[index][2] = value;
-                                });
-                              },
-                              min: 5,
-                              max: 15,
-                              divisions: 2,
-                              label: "${_pageValues[index][2].toInt()} сек.",
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 50,
-                                  // Pages horizontal list view builder
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    primary: false,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: _pageValues.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Center(
-                                        child: InkWell(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          onTap: () {
-                                            setState(() {
-                                              _pageController.jumpToPage(index);
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.all(
-                                                _pageValues.length == 10
-                                                    ? 6.8
-                                                    : 6.1),
-                                            child: Text(
-                                              '${_pageValues.indexOf(_pageValues[index]) + 1}',
-                                              // "${_pageValues[index][0]}",
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: _checkCurrentPage(index),
+                              SizedBox(height: 50),
+                              Text("Время на ответ"),
+                              Slider(
+                                value: _pageValues[index][2],
+                                onChanged: (double value) {
+                                  setState(() {
+                                    _pageValues[index][2] = value;
+                                  });
+                                },
+                                min: 5,
+                                max: 15,
+                                divisions: 2,
+                                label: "${_pageValues[index][2].toInt()} сек.",
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: 50,
+                                    // Pages horizontal list view builder
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      primary: false,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: _pageValues.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Center(
+                                          child: InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            onTap: () {
+                                              setState(() {
+                                                _pageController
+                                                    .jumpToPage(index);
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding: EdgeInsets.all(
+                                                  _pageValues.length == 10
+                                                      ? 6.8
+                                                      : 6.1),
+                                              child: Text(
+                                                '${_pageValues.indexOf(_pageValues[index]) + 1}',
+                                                // "${_pageValues[index][0]}",
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  color:
+                                                      _checkCurrentPage(index),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
+                                    // Pages horizontal list view builder
                                   ),
-                                  // Pages horizontal list view builder
-                                ),
-                                _pageValues.length <= 9
-                                    ? Row(
-                                        children: <Widget>[
-                                          IconButton(
-                                            padding: EdgeInsets.zero,
-                                            icon: Icon(Icons.add),
-                                            onPressed: () {
-                                              _pageValues.add(
-                                                [
-                                                  List.generate(
-                                                      4,
-                                                      (index) =>
-                                                          TextEditingController()),
-                                                  null,
-                                                  5.00,
-                                                ],
-                                              );
-                                              _pageController.jumpToPage(
-                                                _pageValues.indexOf(
-                                                        _pageValues.last) +
-                                                    1,
-                                              );
-                                              setState(() {});
-                                            },
-                                          ),
-                                          _pageValues.length == 1
-                                              ? SizedBox()
-                                              : IconButton(
-                                                  padding: EdgeInsets.zero,
-                                                  icon: Icon(Icons.delete,
-                                                      color: Colors.red),
-                                                  onPressed: () {
-                                                    _pageValues.removeAt(
-                                                        _pageController.page
-                                                            .toInt());
-                                                    setState(() {});
-                                                  },
-                                                ),
-                                        ],
-                                      )
-                                    : IconButton(
-                                        padding: EdgeInsets.zero,
-                                        icon: Icon(Icons.delete,
-                                            color: Colors.red),
-                                        onPressed: () {
-                                          _pageValues.removeAt(
-                                              _pageController.page.toInt());
-                                          setState(() {});
-                                        },
-                                      ),
-                              ],
-                            ),
-                          ],
+                                  _pageValues.length <= 9
+                                      ? Row(
+                                          children: <Widget>[
+                                            IconButton(
+                                              padding: EdgeInsets.zero,
+                                              icon: Icon(Icons.add),
+                                              onPressed: () {
+                                                _pageValues.add(
+                                                  [
+                                                    List.generate(
+                                                        4,
+                                                        (index) =>
+                                                            TextEditingController()),
+                                                    null,
+                                                    5.00,
+                                                  ],
+                                                );
+                                                _pageController.jumpToPage(
+                                                  _pageValues.indexOf(
+                                                          _pageValues.last) +
+                                                      1,
+                                                );
+                                                setState(() {});
+                                              },
+                                            ),
+                                            _pageValues.length == 1
+                                                ? SizedBox()
+                                                : IconButton(
+                                                    padding: EdgeInsets.zero,
+                                                    icon: Icon(Icons.delete,
+                                                        color: Colors.red),
+                                                    onPressed: () {
+                                                      _pageValues.removeAt(
+                                                          _pageController.page
+                                                              .toInt());
+                                                      setState(() {});
+                                                    },
+                                                  ),
+                                          ],
+                                        )
+                                      : IconButton(
+                                          padding: EdgeInsets.zero,
+                                          icon: Icon(Icons.delete,
+                                              color: Colors.red),
+                                          onPressed: () {
+                                            _pageValues.removeAt(
+                                                _pageController.page.toInt());
+                                            setState(() {});
+                                          },
+                                        ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
